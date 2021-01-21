@@ -5,8 +5,18 @@ import yaml
 token = os.environ.get('TOKEN')
 description = '''e-chill bot'''
 intents = discord.Intents.default()
+intents.members = True
+intents.presences = True
 bot = commands.Bot(command_prefix='$', description=description, intents=intents)
 config = yaml.safe_load(open("config.yml", encoding='utf-8'))
+
+
+@bot.event
+async def on_member_join(member):
+    channel = bot.get_channel(config["channels"]["text"]["main"])
+    await channel.send(f"👌 My💯 friend 👬here📍**{member.name}**👦🏻he 🤪 is 😛 already 😘 taken 🔞\n"
+                       f" 🅰️nd he is 🤣cracked 😤 at Fortnite 🎮 my 👦🏿guy 👨🖥️\n"
+                       f" AWnnWn 🍆 💦 🤤 🍑 AuwWan 😩✊🍆💦🍆✊😩")
 
 
 @bot.event
@@ -19,6 +29,8 @@ async def on_message(message):
 @bot.event
 async def on_ready():
     channel = bot.get_channel(config["channels"]["text"]["main"])
+    if config["ready_message"] == "":
+        config["ready_message"] = "."
     bot.status_msg = await channel.send(config["ready_message"])
     print(config["ready_message"])
     for extension in config["extensions"]:
